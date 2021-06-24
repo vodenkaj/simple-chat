@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="public/test.js" defer></script>
+    <link rel="stylesheet" href="public/styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <nav>
+        <div>
+            <a href="/">Home</a>
+        </div>
+        <div id="connection">
+            <object data="public/connected.svg" width="50" height="50"></object>
+            <span>Connected</span>
+        </div>
+        
+    </nav> -->
+    <div class="chat">
+        <ul id="chat"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" maxlength="500" placeholder="Message"/>
+        </form>
+    </div>
+    
+    <div id="blur">
+
+    </div>
+    <div id="status">
+        <button id="close"><object  data="public/close.svg" width="15" height="15"></object></button>
+        <object data="public/error.svg" width="100" height="100"></object>
+        <strong>You have been disconnected.</strong>
+        <a href="/">Login</a>
+        
+    </div>
+</body>
+</html>
