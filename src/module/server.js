@@ -3,6 +3,7 @@ import * as ejs from "ejs";
 import * as fs from "fs";
 import qs from "querystring";
 
+// Config for the server
 const cfg = {
     views: "views/",
     viewEngine: "html",
@@ -33,11 +34,17 @@ class Server {
             } else if (req.url.includes(".svg")) {
                 res.send(req.url, 200, "image/svg+xml", true);
             } else {
+				// Recursive function, binding custom this object to access routes array
                 this.routes[0].bind({ idx: 1, routes: this.routes })(req, res);
             }
         });
     }
 
+	/*
+	 * Setter for the config object
+	 * @param {} prop which propertie of the config to change
+	 * @param {} value of the propertie
+	 */
     set(prop, value) {
         cfg[prop] = value;
     }
@@ -115,6 +122,7 @@ class Server {
     }
 }
 
+// Private class that is inserting some functionality into response object
 class AddFunctionsToResponse {
     static updateResponseObject(res) {
         Object.getOwnPropertyNames(AddFunctionsToResponse).forEach((func) => {

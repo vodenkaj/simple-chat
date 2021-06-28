@@ -2,7 +2,6 @@ const socket = io();
 const messages = document.getElementById("chat");
 const form = document.getElementById("form");
 const input = document.getElementById("input");
-const date = new Date();
 const modal = document.getElementById("status");
 const blur = document.getElementById("blur");
 const statusMsg = modal.children[1];
@@ -65,5 +64,6 @@ function message(msg) {
 }
 
 function getFormattedDate() {
-    return date.getHours() + ":" + date.getMinutes() + " " + + date.getDay() + "." + date.getMonth() + "." + date.getFullYear();
+    let date = new Date();
+    return date.getHours() + ":" + date.getMinutes() + " " + + date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
 }
