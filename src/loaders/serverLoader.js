@@ -39,7 +39,7 @@ function ServerLoader(app) {
 	app.set("viewEngine", "ejs");
 
 	// Starting to listen at provided address
-	app.listen(cfg.port,cfg.address, () => {
+	app.listen(cfg.PORT, cfg.ADDRESS, () => {
 
 		const {address, port} = app.server.address();
 		console.log(`Server is running at http://${address}:${port}`);

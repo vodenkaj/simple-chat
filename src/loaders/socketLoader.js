@@ -1,9 +1,7 @@
 import * as socketio from "socket.io";
 import qs from "querystring";
 import validator from "validator";
-
-// Size of the store
-const N_MESSAGES = 10;
+import {config as cfg} from "../config.js";
 
 function SocketLoader(app) {
 
@@ -24,7 +22,7 @@ function SocketLoader(app) {
 
 		socket.on("chat message", msg => {
 			const id = qs.parse(socket.request.headers["cookie"]).sessionid;
-			if (msg.length > 500) {
+			if (msg.length > cfg.MAX_LEN_MSG) {
 				io.to(socket.id).emit("exceeded limit", {username: msg.username, text: msg.text});
 				return;
 			}
@@ -35,7 +33,7 @@ function SocketLoader(app) {
 
 			msg = validator.escape(msg);
 			io.emit("chat message", {username: app.session.get(id).username, text: msg});
-			if (app.store.length == N_MESSAGES)
+			if (app.store.length == cfg.MAX_MSGS)
 				app.store.shift();
 			app.store.push({username: app.session.get(id).username, text: msg});
 		});
