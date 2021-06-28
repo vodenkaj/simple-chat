@@ -4,9 +4,10 @@ import qs from "querystring";
 import cookieHelper from "../module/cookieHelper.js";
 import {config as cfg} from "../config.js";
 import routes from "../routes/index.js";
+import Session from "../module/sessions.js";
 
 // Map to store sessions : [sessionid => username]
-const session = new Map();
+const session = new Session();
 
 // Array to store last messages
 const store = [];
@@ -27,9 +28,9 @@ function ServerLoader(app) {
 
 	// Inserting session id into the request
 	app.use((req, res, next) => {
-		if (!req.cookies.sessionid || !session.has(req.cookies.sessionid)) {
+		if (!req.cookies.sessionid || !session.getUser(req.cookies.sessionid)) {
 			const id = uuid();
-			session.set(id, { username: "" });
+			session.setUser(id);
 			res.setHeader("Set-Cookie", `sessionid=${id}`);
 		}
 		next();

@@ -6,7 +6,7 @@ const modal = document.getElementById("status");
 const blur = document.getElementById("blur");
 const statusMsg = modal.children[1];
 const closeModal = document.getElementById("close");
-
+const infoPopup = document.getElementById("info-popup");
 
 let username;
 
@@ -29,14 +29,19 @@ socket.on("logged", (msg) => {
 })
 
 socket.on("chat message", (msg) => {
+	infoPopup.style.display = "none";
     messages.appendChild(message(msg));
     messages.scrollTo(0, messages.lastChild.offsetTop);
 })
 
 socket.on("exceeded limit", msg => {
-    console.log(msg);
-    messages.appendChild(message(msg));
-    messages.scrollTo(0, messages.lastChild.offsetTop);
+	infoPopup.style.display = "flex";
+	infoPopup.children[0].textContent = msg;
+});
+
+socket.on("spam timer", msg => {
+	infoPopup.style.display = "flex";
+	infoPopup.children[0].textContent = msg;
 });
 
 socket.on("disconnected", msg => {

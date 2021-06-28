@@ -8,8 +8,8 @@ function routes(app) {
 	app.get("/chat", (req, res) => {
 		if (
 			!req.cookies.sessionid ||
-			!app.session.has(req.cookies.sessionid) ||
-			app.session.get(req.cookies.sessionid).username == ""
+			!app.session.getUser(req.cookies.sessionid) ||
+			!app.session.getName(req.cookies.sessionid)
 		) res.redirect("");
 		else res.render("chat");
 	});
@@ -18,9 +18,8 @@ function routes(app) {
 		if (!req.body.username)
 			res.send("You need to login first!", 200);
 		else {
-			app.session.set(req.cookies.sessionid, {
-				username: validator.escape(req.body.username),
-			});
+			app.session.setName(req.cookies.sessionid,
+				validator.escape(req.body.username));
 			res.redirect("chat");
 		}
 	});
