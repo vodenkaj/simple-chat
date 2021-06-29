@@ -6,7 +6,7 @@ void (async function () {
     try {
         const app = new Server();
         ServerLoader(app);
-		SocketLoader(app);
+	SocketLoader(app);
 
     } catch (err) {
         console.log("Server failed to start! \n %s", err);
