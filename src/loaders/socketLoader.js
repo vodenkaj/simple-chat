@@ -20,7 +20,7 @@ function SocketLoader(app) {
 			})
 		}
 		else {
-			io.to(socket.id).emit("disconnected", "You have been disconected.");
+			io.to(socket.id).emit("disconnected", "You have been disconnected.");
 			socket.disconnect();
 		}
 
