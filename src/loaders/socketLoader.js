@@ -54,6 +54,14 @@ function SocketLoader(app) {
 			// Store the message
 			app.store.push({username: app.session.getName(id), text: msg});
 		});
+
+		socket.on("disconnect", reason => {
+			const id = qs.parse(socket.request.headers["cookie"]).sessionid;
+			if (!id || !app.session.getUser(id)) {
+				return;
+			}
+			app.session.delUser(id);
+		});
 	});
 }
 

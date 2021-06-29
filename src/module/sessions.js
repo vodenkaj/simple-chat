@@ -1,16 +1,20 @@
 class Session {
-    constructor() {
-        this.sessions = {};
-    }
+	constructor() {
+		this.sessions = {};
+	}
 
-    getUser(id) {
-        return this.sessions[id];
-    }
+	getUser(id) {
+		return this.sessions[id];
+	}
 
-    setUser(id, data={name: "", lastMsg: 0}) {
-        this.sessions[id] = data;
-    }
-	
+	setUser(id, data={name: "", lastMsg: 0}) {
+		this.sessions[id] = data;
+	}
+
+	delUser(id) {
+		delete this.sessions[id];
+	}
+
 	setName(id, name) {
 		this.sessions[id].name = name;
 	}
@@ -25,6 +29,14 @@ class Session {
 
 	getLastMsg(id) {
 		return this.sessions[id].lastMsg;
+	}
+
+	hasName(username) {
+		for (const {name} of Object.values(this.sessions)) {
+			if (name == username)
+				return true;
+		}
+		return false;
 	}
 }
 

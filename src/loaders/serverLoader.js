@@ -31,7 +31,8 @@ function ServerLoader(app) {
 		if (!req.cookies.sessionid || !session.getUser(req.cookies.sessionid)) {
 			const id = uuid();
 			session.setUser(id);
-			res.setHeader("Set-Cookie", `sessionid=${id}`);
+			res.setHeader("Set-Cookie", `sessionid=${id}; SameSite=Lax`);
+			req.cookies.sessionid = id; 
 		}
 		next();
 	});

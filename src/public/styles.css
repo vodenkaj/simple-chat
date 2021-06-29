@@ -12,11 +12,7 @@ body {
 	display: flex;
 }
 
-body nav {
-	height: 100%;
-	width: 5%;
-	background: rgb(49, 49, 49);
-}
+/* Login page */
 
 .login {
 	display: flex;
@@ -24,20 +20,8 @@ body nav {
 	align-self: center;
 	flex-direction: column;
 	width: 100%;
-}
-
-.login h1 {
-	color: #fff;
+	color: #ffffff;
 	text-align: center;
-	margin: 2rem 0;
-}
-
-#status button,
-#status a,
-.login input {
-	padding: 1rem;
-	margin: 1rem 0;
-	font-size: medium;
 }
 
 .login input[type="text"] {
@@ -60,8 +44,13 @@ input:focus {
 	0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
-#status a,
-#status button,
+.login input {
+	padding: 1rem;
+	margin: 1rem 0;
+	font-size: medium;
+}
+
+#modal-error a,
 .login input[type="submit"] {
 	background-color: #4a77d4;
 	border: 1px solid #3762bc;
@@ -70,44 +59,9 @@ input:focus {
 	border-radius: 1rem;
 }
 
-#status a {
-	box-shadow: 0px 6px 18px -5px #4a77d4;
-	text-align: center;
-	padding: 1rem 3rem;
-}
+/* Modal for showing critical errors */
 
-#status strong {
-	min-width: 7rem;
-	padding: 2rem 0;
-}
-
-#close {
-	background-color: transparent !important;
-	border: none !important;
-	box-shadow: none !important;
-	position: absolute;
-	right: 5%;
-	top: 5%;
-	padding: 0 !important;
-	margin: 0 !important;
-}
-
-#close object {
-	pointer-events: none;
-}
-
-#status button,
-#status a {
-	text-decoration: none;
-	cursor: pointer;
-}
-
-#status button {
-	background-color: #d44a55;
-	border: 1px solid #ad2934;
-}
-
-#status {
+#modal-error {
 	padding: 10vh;
 	position: absolute;
 	top: 50%;
@@ -123,6 +77,21 @@ input:focus {
 	text-align: center;
 }
 
+#modal-error a {
+	box-shadow: 0px 6px 18px -5px #4a77d4;
+	text-align: center;
+	padding: 1rem 3rem;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#modal-error strong {
+	min-width: 7rem;
+	padding: 2rem 0;
+}
+
+/* Input form for messages */
+
 #form {
 	position: fixed;
 	width: 100%;
@@ -130,6 +99,14 @@ input:focus {
 	display: flex;
 	height: 4rem;
 	box-sizing: border-box;
+}
+
+#input {
+	outline: none;
+	border: none;
+	padding: 0 1rem;
+	flex-grow: 1;
+	background: rgb(197, 197, 197);
 }
 
 #info-popup {
@@ -158,19 +135,11 @@ input:focus {
 	backdrop-filter: blur(3px);
 }
 
-#input:focus {
-	outline: none;
-}
+/* Chat box */
 
-#input {
-	border: none;
-	padding: 0 1rem;
-	flex-grow: 1;
-	background: rgb(197, 197, 197);
-}
-
-.chat-wrapper {
-	width: 80%;
+.chat {
+	height: 100%;
+	width: 100%;
 }
 
 #chat {
@@ -194,27 +163,22 @@ input:focus {
 	font-size: 13px;
 }
 
-.chat {
-	height: 100%;
-	width: 100%;
-}
-
-.reverse {
-	background: #ccc8c8 !important;
-	border-color: #ccc8c8 !important;
-}
-
-#chat p {
-	margin: 0;
-}
-
 #chat .date {
 	font-size: 10px;
 	float: right;
 }
 
+/* Text of the message */
+
 #chat > li > div {
 	margin: 0.5rem 0;
+}
+
+/* Client message color */
+
+.reverse {
+	background: #ccc8c8 !important;
+	border-color: #ccc8c8 !important;
 }
 
 /* SCROLLBAR */

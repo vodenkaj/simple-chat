@@ -16,16 +16,18 @@ function routes(app) {
 
 	app.post("/login", (req, res) => {
 		if (!req.body.username)
-			res.send("You need to login first!", 200);
+			res.send("You have to provide username!", 403);
+		else if (app.session.hasName(req.body.username))
+			res.send("User with same name is already logged in!", 403);
 		else {
 			app.session.setName(req.cookies.sessionid,
 				validator.escape(req.body.username));
-			res.redirect("chat");
+			res.send("chat", 200);
 		}
 	});
 
 	app.get("*", (req, res) => {
-		res.send("Nothing here bud", 404);
+		res.redirect("");
 	});
 }
 
