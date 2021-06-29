@@ -45,8 +45,10 @@ function SocketLoader(app) {
 
 			// Sanitize the messages to get rid of possible XSS attack
 			msg = validator.escape(msg);
-
+			
+			// Set time on which message was sent
 			app.session.setLastMsg(id);
+			
 			io.emit("chat message", {username: app.session.getName(id), text: msg});
 			if (app.store.length == cfg.MAX_MSGS)
 				app.store.shift();
