@@ -7,7 +7,7 @@ import routes from "../routes/index.js";
 import Session from "../module/sessions.js";
 
 // Map to store sessions : [sessionid => username]
-const session = new Session();
+const session = new Session(cfg.SESSION_INTERVAL_TIME, cfg.SESSION_TIMEOUT);
 
 // Array to store last messages
 const store = [];
@@ -32,7 +32,7 @@ function ServerLoader(app) {
 			const id = uuid();
 			session.setUser(id);
 			res.setHeader("Set-Cookie", `sessionid=${id}; SameSite=Lax`);
-			req.cookies.sessionid = id; 
+			req.cookies.sessionid = id;
 		}
 		next();
 	});

@@ -13,14 +13,19 @@ function SocketLoader(app) {
 
 		// Getting session id to check if client is logged in
 		const id = qs.parse(socket.request.headers["cookie"]).sessionid;
-		if (id && app.session.getUser(id)) {
+		if (id && app.session.getUser(id) && !app.session.isActive(id)) {
+			const idx = app.session.disconnected.indexOf(id);
+			if (idx != -1)
+				app.session.disconnected.splice(idx, 1);
+			app.session.setIsActive(id, true);
 			io.to(socket.id).emit("logged", app.session.getName(id));
 			app.store.forEach(msg => {
 				io.to(socket.id).emit("chat message", {username: msg.username, text: msg.text});
 			})
 		}
 		else {
-			io.to(socket.id).emit("disconnected", "You have been disconnected.");
+			let msg = id && app.session.getUser(id) && app.session.isActive(id) ? "You can't have multiple sessions open!" : "You have been disconnected, please refresh the page."
+			io.to(socket.id).emit("disconnected", msg);
 			socket.disconnect();
 		}
 
@@ -45,10 +50,10 @@ function SocketLoader(app) {
 
 			// Sanitize the messages to get rid of possible XSS attack
 			msg = validator.escape(msg);
-			
+
 			// Set time on which message was sent
 			app.session.setLastMsg(id);
-			
+
 			io.emit("chat message", {username: app.session.getName(id), text: msg});
 			if (app.store.length == cfg.MAX_MSGS)
 				app.store.shift();
@@ -62,7 +67,9 @@ function SocketLoader(app) {
 			if (!id || !app.session.getUser(id)) {
 				return;
 			}
-			app.session.delUser(id);
+			app.session.setDcTime(id);
+			app.session.disconnected.push(id);
+			app.session.setIsActive(id, false);
 		});
 	});
 }

@@ -1,8 +1,11 @@
-import validator from "validator";
+import validator from "validator"
 
 function routes(app) {
 	app.get("/", (req, res) => {
-		res.render("index");
+		if (app.session.getName(req.cookies.sessionid))
+			res.redirect("chat")
+		else
+			res.render("index");
 	});
 
 	app.get("/chat", (req, res) => {
