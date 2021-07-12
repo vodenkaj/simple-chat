@@ -14,17 +14,24 @@ function SocketLoader(app) {
 		// Getting session id to check if client is logged in
 		const id = qs.parse(socket.request.headers["cookie"]).sessionid;
 		if (id && app.session.getUser(id) && !app.session.isActive(id)) {
+
+			// Check if client is in disconnect array, if so remove him from the array.
 			const idx = app.session.disconnected.indexOf(id);
 			if (idx != -1)
 				app.session.disconnected.splice(idx, 1);
 			app.session.setIsActive(id, true);
 			io.to(socket.id).emit("logged", app.session.getName(id));
+
+			// Send the client last cfg.MAX_MSGS messages
 			app.store.forEach(msg => {
 				io.to(socket.id).emit("chat message", {username: msg.username, text: msg.text});
 			})
+
+			socket.sessionid = id;
 		}
 		else {
-			let msg = id && app.session.getUser(id) && app.session.isActive(id) ? "You can't have multiple sessions open!" : "You have been disconnected, please refresh the page."
+			let msg = "You have been disconnected, please refresh the page."
+			if (id && app.session.getUser(id) && app.session.isActive(id)) msg = "You can't have multiple sessions open!"
 			io.to(socket.id).emit("disconnected", msg);
 			socket.disconnect();
 		}
@@ -32,18 +39,11 @@ function SocketLoader(app) {
 		// Event fired on client message
 		socket.on("chat message", msg => {
 
-			// Getting session id to check if client is logged in
-			const id = qs.parse(socket.request.headers["cookie"]).sessionid;
-
-			if (!id || !app.session.getUser(id)) {
-				io.to(socket.id).emit("disconnected", "You have been disconected, please refresh the page.");
-				return;
-			}
-			else if (msg.length > cfg.MAX_LEN_MSG) {
+			if (msg.length > cfg.MAX_LEN_MSG) {
 				io.to(socket.id).emit("exceeded limit", "Your message exceeded maximum character limit!");
 				return;
 			}
-			else if (Date.now() - app.session.getLastMsg(id) < cfg.MSG_TIME_LIMIT) {
+			else if (Date.now() - app.session.getLastMsg(socket.sessionid) < cfg.MSG_TIME_LIMIT) {
 				io.to(socket.id).emit("spam timer", `You have to wait ${cfg.MSG_TIME_LIMIT / 1000} seconds before sending a new message!`);
 				return;
 			}
@@ -52,24 +52,20 @@ function SocketLoader(app) {
 			msg = validator.escape(msg);
 
 			// Set time on which message was sent
-			app.session.setLastMsg(id);
+			app.session.setLastMsg(socket.sessionid);
 
-			io.emit("chat message", {username: app.session.getName(id), text: msg});
+			io.emit("chat message", {username: app.session.getName(socket.sessionid), text: msg});
 			if (app.store.length == cfg.MAX_MSGS)
 				app.store.shift();
 
 			// Store the message
-			app.store.push({username: app.session.getName(id), text: msg});
+			app.store.push({username: app.session.getName(socket.sessionid), text: msg});
 		});
 
 		socket.on("disconnect", reason => {
-			const id = qs.parse(socket.request.headers["cookie"]).sessionid;
-			if (!id || !app.session.getUser(id)) {
-				return;
-			}
-			app.session.setDcTime(id);
-			app.session.disconnected.push(id);
-			app.session.setIsActive(id, false);
+			app.session.setDcTime(socket.sessionid);
+			app.session.disconnected.push(socket.sessionid);
+			app.session.setIsActive(socket.sessionid, false);
 		});
 	});
 }

@@ -6,7 +6,7 @@ import {config as cfg} from "../config.js";
 import routes from "../routes/index.js";
 import Session from "../module/sessions.js";
 
-// Map to store sessions : [sessionid => username]
+// Custom object to store sessions
 const session = new Session(cfg.SESSION_INTERVAL_TIME, cfg.SESSION_TIMEOUT);
 
 // Array to store last messages
