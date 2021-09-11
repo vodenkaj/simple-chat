@@ -143,7 +143,9 @@ class AddFunctionsToResponse {
             `${cfg.views}${file}.${cfg.viewEngine}`,
             "utf-8",
             (error, content) => {
-                if (error) throw new Error(error);
+                
+		// This would have crashed the app
+		// if (error) throw new Error(error);
 
                 if (cfg.viewEngine === "ejs") {
                     content = ejs.render(content, data);
@@ -159,7 +161,8 @@ class AddFunctionsToResponse {
         if (isFile) {
             data = data.includes(cfg.static) ? data.slice(1) : data;
             fs.readFile(`${data}`, (error, content) => {
-                if (error) throw new Error(error);
+		// This would have crashed the app
+                // if (error) throw new Error(error);
                 this.writeHead(code, { "Content-Type": type });
                 this.end(content);
             });
